@@ -1,0 +1,55 @@
+{# --- Macro para o Card de Item (usado no index.html) --- #}
+{% macro item_card(item) %}
+<div class="item-card" onclick="otimizar('{{ item.item_code }}')" data-search="{{ item.item_code|lower }} {{ item.item_name|lower }}">
+    {% if item.demanda > item.estoque_atual %}
+    <span class="priority-badge priority-high">PRIORIDADE ALTA</span>
+    {% else %}
+    <span class="priority-badge priority-low">ESTOQUE</span>
+    {% endif %}
+    
+    <div class="item-code">{{ item.item_code }}</div>
+    <div class="item-name">{{ item.item_name }}</div>
+    
+    <div class="item-specs">
+        </div>
+    
+    <div class="item-demand">
+        </div>
+</div>
+{% endmacro %}
+
+
+{# --- Macro para o Card de Padrão (usado no results.html) --- #}
+{% macro pattern_card(padrao, loop) %}
+<div class="pattern-card">
+    {% if loop.index == 1 %}
+    <div class="best-pattern-badge">⭐ MELHOR PADRÃO</div>
+    {% endif %}
+    
+    <div class="pattern-header">
+        <div class="pattern-rank">#{{ loop.index }}</div>
+        <div class="pattern-metrics">
+            </div>
+    </div>
+    
+    <div class="visual-bar">
+        </div>
+    
+    <div class="items-list">
+        <h4>Composição do Padrão:</h4>
+        
+        <div class="item-row item-row-header">
+            </div>
+        
+        {% for item, qty in padrao.combinacao %}
+        <div class="item-row">
+            </div>
+        {% endfor %}
+    </div>
+    
+    <div class="export-buttons">
+        <button class="export-btn" onclick="imprimirPadrao({{ loop.index }})">🖨️ Imprimir Padrão</button>
+        <button class="export-btn" onclick="copiarPadrao({{ loop.index }})">📋 Copiar para Clipboard</button>
+    </div>
+</div>
+{% endmacro %}

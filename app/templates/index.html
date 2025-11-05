@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% from "_components.html" import item_card %}
+
+{% block title %}Otimização de Corte 1D - Início{% endblock %}
+
+{% block head_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="header">
+        <h1>🔧 Otimização de Corte 1D</h1>
+        <p>Sistema de Otimização para Chapas de Aço</p>
+    </div>
+    
+    <div class="config-panel">
+        <label>Largura da Chapa Padrão:</label>
+        <input type="number" id="larguraChapa" value="{{ largura_chapa }}" min="100" step="10">
+        <span style="margin-right: 10px; color: #666;">mm</span>
+        <button onclick="atualizarLargura()">Atualizar</button>
+    </div>
+    
+    <div class="content">
+        <div class="items-grid" id="itemsGrid">
+            {% for item in items %}
+                {{ item_card(item) }}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+{% endblock %}

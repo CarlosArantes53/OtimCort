@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% from "_components.html" import pattern_card %}
+
+{% block title %}Resultados da Otimização - {{ item_selecionado.item_code }}{% endblock %}
+
+{% block head_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/results.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="header">
+        <h1>🎯 Resultados da Otimização</h1>
+        <div class="header-info">
+            </div>
+        <a href="/" class="back-button">← Voltar para Lista de Itens</a>
+    </div>
+    
+    <div class="content">
+        <div class="summary-box">
+            </div>
+        
+        <h2 class="patterns-title">🔝 Top 10 Padrões de Corte Otimizados</h2>
+        
+        {% for padrao in padroes %}
+            {{ pattern_card(padrao, loop) }}
+        {% endfor %}
+        
+        {% if padroes|length == 0 %}
+            {% endif %}
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/results.js') }}"></script>
+{% endblock %}
