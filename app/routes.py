@@ -50,15 +50,29 @@ def config():
     
     # GET
     return jsonify({'largura_chapa': current_app.config['LARGURA_CHAPA_PADRAO']})
-
 @bp.route('/otimizar/<item_code>')
 def otimizar(item_code):
     """Otimiza corte para um item selecionado"""
     
-    # Pega configurações atuais do app
+    # Pega configurações padrão do app
     db_path = current_app.config['DATABASE_PATH']
-    largura_chapa = current_app.config['LARGURA_CHAPA_PADRAO']
-    margem_corte = current_app.config['MARGEM_CORTE']
+    default_largura = current_app.config['LARGURA_CHAPA_PADRAO']
+
+    # Pega valores da URL (query parameters)
+    # Se não forem passados, usa o padrão do config
+    try:
+        largura_bruta = float(request.args.get('largura', default_largura))
+        refilo = float(request.args.get('refilo', 0))
+    except ValueError:
+        largura_bruta = default_largura
+        refilo = 0
+
+    # Calcula a largura utilizável (conforme sua regra de negócio)
+    largura_utilizavel = largura_bruta - refilo
+    
+    if largura_utilizavel <= 0:
+        # Lida com caso onde refilo é maior que a chapa
+        return abort(400, "Refilo não pode ser maior que a largura da chapa.")
 
     # Busca o item selecionado
     item_selecionado = database.get_item_by_code(db_path, item_code)
@@ -73,15 +87,18 @@ def otimizar(item_code):
         item_selecionado.largura
     )
     
-    # Executa otimização
-    # Passamos as configurações para o otimizador
-    otimizador = OtimizadorCorte1D(largura_chapa, margem_corte)
+    # Executa otimização com a largura utilizável
+    # (Certifique-se de que app/optimizer.py aceita margem_corte no construtor)
+    otimizador = OtimizadorCorte1D(largura_utilizavel)
     top_padroes = otimizador.gerar_padroes_otimizados(itens_grupo, top_n=10)
     
     return render_template(
         'results.html',
         item_selecionado=item_selecionado,
         padroes=top_padroes,
-        largura_chapa=largura_chapa,
+        # Passa os novos valores para o template
+        largura_chapa_bruta=largura_bruta,
+        refilo=refilo,
+        largura_chapa_utilizavel=largura_utilizavel,
         total_itens_grupo=len(itens_grupo)
     )

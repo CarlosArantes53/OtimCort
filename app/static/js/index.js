@@ -1,6 +1,11 @@
 // app/static/js/index.js
 function otimizar(itemCode) {
-    window.location.href = '/otimizar/' + itemCode;
+    const largura = document.getElementById('larguraChapa').value;
+    const refilo = document.getElementById('refilo').value;
+    
+    // Constrói a URL com query parameters
+    const url = `/otimizar/${itemCode}?largura=${largura}&refilo=${refilo}`;
+    window.location.href = url;
 }
 
 function atualizarLargura() {

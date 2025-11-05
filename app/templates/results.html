@@ -11,7 +11,27 @@
     <div class="header">
         <h1>🎯 Resultados da Otimização</h1>
         <div class="header-info">
+            <div class="header-stat">
+                <div class="header-stat-label">Item Otimizado</div>
+                <div class="header-stat-value">{{ item_selecionado.item_code }}</div>
             </div>
+            <div class="header-stat">
+                <div class="header-stat-label">Largura Bruta (mm)</div>
+                <div class="header-stat-value">{{ "%.0f"|format(largura_chapa_bruta) }}</div>
+            </div>
+            <div class="header-stat">
+                <div class="header-stat-label">Refilo (mm)</div>
+                <div class="header-stat-value">{{ "%.0f"|format(refilo) }}</div>
+            </div>
+            <div class="header-stat">
+                <div class="header-stat-label">Largura Útil (mm)</div>
+                <div class="header-stat-value" style="color: #8bc34a;">{{ "%.0f"|format(largura_chapa_utilizavel) }}</div>
+            </div>
+            <div class="header-stat">
+                <div class="header-stat-label">Itens no Grupo</div>
+                <div class="header-stat-value">{{ total_itens_grupo }}</div>
+            </div>
+        </div>
         <a href="/" class="back-button">← Voltar para Lista de Itens</a>
     </div>
     

@@ -1,6 +1,6 @@
 # app/optimizer.py
 import itertools
-from typing import List, Tuple
+from typing import List
 from .models import Item, PadraoCorte
 
 class OtimizadorCorte1D:
@@ -8,7 +8,6 @@ class OtimizadorCorte1D:
     
     def __init__(self, largura_chapa: float):
         self.largura_chapa = largura_chapa
-        self.margem_corte = 5  # mm - margem de segurança entre cortes
         
     def gerar_padroes_otimizados(self, itens: List[Item], top_n: int = 10) -> List[PadraoCorte]:
         """Gera os top N padrões de corte otimizados"""
@@ -81,7 +80,7 @@ class OtimizadorCorte1D:
         
         # Tenta diferentes quantidades de cada item
         for item in itens_principais:
-            max_qty = int(self.largura_chapa / (item.desenvolvimento + self.margem_corte))
+            max_qty = int(self.largura_chapa / (item.desenvolvimento))
             
             # Padrão com apenas este item
             for qty in range(1, min(max_qty + 1, 20)):
@@ -108,9 +107,7 @@ class OtimizadorCorte1D:
         score_prioridade = 0
         
         for item in itens:
-            # Tenta adicionar o máximo deste item
-            tamanho_com_margem = item.desenvolvimento + self.margem_corte
-            qty_possivel = int(espaco_restante / tamanho_com_margem)
+            qty_possivel = int(espaco_restante / item.desenvolvimento)
             
             if qty_possivel > 0:
                 # Limita pela necessidade do item
@@ -119,7 +116,7 @@ class OtimizadorCorte1D:
                 
                 if qty_desejada > 0:
                     combinacao.append((item, qty_desejada))
-                    espaco_usado = qty_desejada * tamanho_com_margem
+                    espaco_usado = qty_desejada * item.desenvolvimento
                     espaco_restante -= espaco_usado
                     score_prioridade += item.prioridade * qty_desejada
         
@@ -152,15 +149,14 @@ class OtimizadorCorte1D:
             
             # Para cada item, encontra a quantidade que minimiza desperdício
             for item in itens_disponiveis:
-                tamanho_com_margem = item.desenvolvimento + self.margem_corte
-                max_qty = int(espaco_restante / tamanho_com_margem)
+                max_qty = int(espaco_restante / item.desenvolvimento)
                 
                 if max_qty > 0:
                     falta, pode_estocar = item.quantidade_necessaria
                     qty_limite = min(max_qty, falta + pode_estocar, 30)
                     
                     for qty in range(1, qty_limite + 1):
-                        espaco_usado = qty * tamanho_com_margem
+                        espaco_usado = qty * item.desenvolvimento
                         desperdicio_temp = espaco_restante - espaco_usado
                         
                         if desperdicio_temp < menor_desperdicio and desperdicio_temp >= 0:
@@ -172,7 +168,7 @@ class OtimizadorCorte1D:
                 break
             
             combinacao.append((melhor_item, melhor_qty))
-            espaco_restante -= melhor_qty * (melhor_item.desenvolvimento + self.margem_corte)
+            espaco_restante -= melhor_qty * melhor_item.desenvolvimento
             score_prioridade += melhor_item.prioridade * melhor_qty
             itens_disponiveis.remove(melhor_item)
         
@@ -192,7 +188,7 @@ class OtimizadorCorte1D:
     
     def _criar_padrao_simples(self, item: Item, quantidade: int) -> PadraoCorte:
         """Cria padrão com apenas um tipo de item"""
-        tamanho_total = quantidade * (item.desenvolvimento + self.margem_corte)
+        tamanho_total = quantidade * item.desenvolvimento
         
         if tamanho_total > self.largura_chapa:
             return None
@@ -214,15 +210,15 @@ class OtimizadorCorte1D:
         padroes = []
         
         for qty1 in range(1, 15):
-            espaco_usado1 = qty1 * (item1.desenvolvimento + self.margem_corte)
+            espaco_usado1 = qty1 * item1.desenvolvimento
             if espaco_usado1 >= self.largura_chapa:
                 break
             
             espaco_restante = self.largura_chapa - espaco_usado1
-            max_qty2 = int(espaco_restante / (item2.desenvolvimento + self.margem_corte))
+            max_qty2 = int(espaco_restante / item2.desenvolvimento)
             
             for qty2 in range(1, min(max_qty2 + 1, 15)):
-                espaco_usado2 = qty2 * (item2.desenvolvimento + self.margem_corte)
+                espaco_usado2 = qty2 * item2.desenvolvimento
                 desperdicio = espaco_restante - espaco_usado2
                 
                 if desperdicio >= 0:
@@ -249,20 +245,20 @@ class OtimizadorCorte1D:
         item1, item2, item3 = itens[0], itens[1], itens[2]
         
         for qty1 in range(1, 8):
-            espaco1 = qty1 * (item1.desenvolvimento + self.margem_corte)
+            espaco1 = qty1 * item1.desenvolvimento
             if espaco1 >= self.largura_chapa:
                 break
             
             for qty2 in range(1, 8):
-                espaco2 = espaco1 + qty2 * (item2.desenvolvimento + self.margem_corte)
+                espaco2 = espaco1 + qty2 * item2.desenvolvimento
                 if espaco2 >= self.largura_chapa:
                     break
                 
                 espaco_restante = self.largura_chapa - espaco2
-                max_qty3 = int(espaco_restante / (item3.desenvolvimento + self.margem_corte))
+                max_qty3 = int(espaco_restante / item3.desenvolvimento)
                 
                 for qty3 in range(1, min(max_qty3 + 1, 8)):
-                    espaco3 = qty3 * (item3.desenvolvimento + self.margem_corte)
+                    espaco3 = qty3 * item3.desenvolvimento
                     desperdicio = espaco_restante - espaco3
                     
                     if desperdicio >= 0:

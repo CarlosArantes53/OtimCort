@@ -119,8 +119,11 @@
         
         .pattern-metrics {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            /* Força 3 colunas de tamanho igual */
+            grid-template-columns: repeat(3, 1fr);
             gap: 15px;
+            /* Garante que o grid de métricas tenha uma largura razoável */
+            width: 60%; 
         }
         
         .metric-box {

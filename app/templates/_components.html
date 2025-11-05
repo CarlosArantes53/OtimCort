@@ -11,10 +11,30 @@
     <div class="item-name">{{ item.item_name }}</div>
     
     <div class="item-specs">
+        <div class="spec-item">
+            <span class="spec-label">Espessura</span>
+            <span class="spec-value">{{ "%.1f"|format(item.espessura) }} mm</span>
         </div>
+        <div class="spec-item">
+            <span class="spec-label">Desenvolv.</span>
+            <span class="spec-value">{{ "%.1f"|format(item.desenvolvimento) }} mm</span>
+        </div>
+    </div>
     
     <div class="item-demand">
+        <div class="demand-box {% if item.demanda > item.estoque_atual %}high{% endif %}">
+            <div class="demand-label">Demanda</div>
+            <div class="demand-value">{{ item.demanda }}</div>
         </div>
+        <div class="demand-box">
+            <div class="demand-label">Estoque</div>
+            <div class="demand-value">{{ item.estoque_atual }}</div>
+        </div>
+        <div class="demand-box">
+            <div class="demand-label">Máximo</div>
+            <div class="demand-value">{{ item.estoque_maximo }}</div>
+        </div>
+    </div>
 </div>
 {% endmacro %}
 
@@ -22,28 +42,60 @@
 {# --- Macro para o Card de Padrão (usado no results.html) --- #}
 {% macro pattern_card(padrao, loop) %}
 <div class="pattern-card">
-    {% if loop.index == 1 %}
-    <div class="best-pattern-badge">⭐ MELHOR PADRÃO</div>
-    {% endif %}
     
     <div class="pattern-header">
         <div class="pattern-rank">#{{ loop.index }}</div>
         <div class="pattern-metrics">
+            <div class="metric-box">
+                <div class="metric-label">Desperdício (mm)</div>
+                <div class="metric-value warning">{{ "%.1f"|format(padrao.desperdicio) }}</div>
             </div>
+            <div class="metric-box">
+                <div class="metric-label">Utilização (%)</div>
+                <div class="metric-value good">{{ "%.1f"|format(padrao.utilizacao_percentual) }}</div>
+            </div>
+            <div class="metric-box">
+                <div class="metric-label">Score Prioridade</div>
+                <div class="metric-value excellent">{{ padrao.score_prioridade }}</div>
+            </div>
+        </div>
     </div>
     
     <div class="visual-bar">
+        <div class="visual-bar-used" style="width: {{ padrao.utilizacao_percentual }}%;">
+            {{ "%.1f"|format(padrao.utilizacao_percentual) }}%
         </div>
+        <div class="visual-bar-waste">
+            Perda: {{ "%.1f"|format(padrao.desperdicio) }}mm
+        </div>
+    </div>
     
     <div class="items-list">
         <h4>Composição do Padrão:</h4>
         
         <div class="item-row item-row-header">
-            </div>
+            <div class="item-code-col">Item</div>
+            <div>Nome</div>
+            <div>Qtd.</div>
+            <div>Desenvolv. (mm)</div>
+            <div>Prioridade</div>
+        </div>
         
         {% for item, qty in padrao.combinacao %}
         <div class="item-row">
+            <div class="item-code-col">
+                {% if item.prioridade >= 10 %}
+                    <span class="priority-indicator priority-high"></span>
+                {% else %}
+                    <span class="priority-indicator priority-low"></span>
+                {% endif %}
+                {{ item.item_code }}
             </div>
+            <div>{{ item.item_name }}</div>
+            <div><strong>{{ qty }}</strong></div>
+            <div>{{ item.desenvolvimento }}</div>
+            <div>{{ item.prioridade }}</div>
+        </div>
         {% endfor %}
     </div>
     
