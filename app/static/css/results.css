@@ -158,36 +158,6 @@
             color: #ff9800;
         }
         
-        .visual-bar {
-            margin: 20px 0;
-            height: 60px;
-            background: #f0f0f0;
-            border-radius: 10px;
-            overflow: hidden;
-            position: relative;
-            border: 2px solid #ddd;
-        }
-        
-        .visual-bar-used {
-            height: 100%;
-            background: linear-gradient(90deg, #4caf50 0%, #8bc34a 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 1.1em;
-            transition: width 0.8s ease-in-out;
-        }
-        
-        .visual-bar-waste {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #666;
-            font-weight: 600;
-        }
         
         .items-list {
             margin-top: 20px;

@@ -1,8 +1,12 @@
 {# --- Macro para o Card de Item (usado no index.html) --- #}
 {% macro item_card(item) %}
-<div class="item-card" onclick="otimizar('{{ item.item_code }}')" data-search="{{ item.item_code|lower }} {{ item.item_name|lower }}">
+<div class="item-card" 
+     onclick="otimizar('{{ item.item_code }}')" 
+     data-search="{{ item.item_code|lower }} {{ item.item_name|lower }}"
+     data-espessura="{{ item.espessura }}">
+    
     {% if item.demanda > item.estoque_atual %}
-    <span class="priority-badge priority-high">PRIORIDADE ALTA</span>
+    <span class="priority-badge priority-high">PRIORIDADE</span>
     {% else %}
     <span class="priority-badge priority-low">ESTOQUE</span>
     {% endif %}
@@ -61,17 +65,8 @@
         </div>
     </div>
     
-    <div class="visual-bar">
-        <div class="visual-bar-used" style="width: {{ padrao.utilizacao_percentual }}%;">
-            {{ "%.1f"|format(padrao.utilizacao_percentual) }}%
-        </div>
-        <div class="visual-bar-waste">
-            Perda: {{ "%.1f"|format(padrao.desperdicio) }}mm
-        </div>
-    </div>
     
     <div class="items-list">
-        <h4>Composição do Padrão:</h4>
         
         <div class="item-row item-row-header">
             <div class="item-code-col">Item</div>

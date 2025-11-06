@@ -253,3 +253,46 @@
             font-size: 0.9em;
             margin-top: 5px;
         }
+
+        .filter-panel {
+    background: #f8f9fa;
+    padding: 20px 30px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    align-items: center;
+    border: 2px solid #e0e0e0;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.filter-group label {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+    font-size: 0.9em;
+}
+
+.filter-panel input[type="text"],
+.filter-panel select {
+    padding: 12px 15px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 1em;
+    width: 100%;
+    min-width: 250px;
+    transition: all 0.3s;
+}
+
+.filter-panel input[type="text"]:focus,
+.filter-panel select:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}

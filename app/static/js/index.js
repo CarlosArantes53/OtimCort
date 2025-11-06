@@ -1,9 +1,7 @@
-// app/static/js/index.js
 function otimizar(itemCode) {
     const largura = document.getElementById('larguraChapa').value;
     const refilo = document.getElementById('refilo').value;
     
-    // Constrói a URL com query parameters
     const url = `/otimizar/${itemCode}?largura=${largura}&refilo=${refilo}`;
     window.location.href = url;
 }
@@ -30,12 +28,19 @@ function atualizarLargura() {
 }
 
 function filtrarItens() {
-    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    const filtroDescricao = document.getElementById('filtroDescricao').value.toLowerCase();
+    const filtroEspessura = document.getElementById('filtroEspessura').value;
+    
     const cards = document.querySelectorAll('.item-card');
     
     cards.forEach(card => {
         const searchData = card.getAttribute('data-search');
-        if (searchData.includes(searchTerm)) {
+        const espessuraData = card.getAttribute('data-espessura');
+        
+        const matchDescricao = searchData.includes(filtroDescricao);
+        const matchEspessura = (filtroEspessura === "") || (espessuraData === filtroEspessura);
+        
+        if (matchDescricao && matchEspessura) {
             card.style.display = 'block';
         } else {
             card.style.display = 'none';

@@ -9,8 +9,7 @@
 
 {% block content %}
     <div class="header">
-        <h1>🔧 Otimização de Corte 1D</h1>
-        <p>Sistema de Otimização para Chapas de Aço</p>
+        <h1>Riofer - Otimização de Corte</h1>
     </div>
     
     <div class="config-panel">
@@ -24,6 +23,22 @@
     </div>
     
     <div class="content">
+    
+        <div class="filter-panel">
+            <div class="filter-group">
+                <label for="filtroDescricao">Buscar por Código ou Nome:</label>
+                <input type="text" id="filtroDescricao" onkeyup="filtrarItens()" placeholder="Digite para filtrar...">
+            </div>
+            <div class="filter-group">
+                <label for="filtroEspessura">Filtrar por Espessura:</label>
+                <select id="filtroEspessura" oninput="filtrarItens()">
+                    <option value="">Todas as Espessuras</option>
+                    {% for esp in espessuras %}
+                        <option value="{{ esp }}">{{ "%.1f"|format(esp) }} mm</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
         <div class="items-grid" id="itemsGrid">
             {% for item in items %}
                 {{ item_card(item) }}
